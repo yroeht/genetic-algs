@@ -22,7 +22,7 @@ given chromosome. It must have comparison operators defined on it. `int` and
 `double` are fine. Note that the algorithm tries to maximize the fitness, so
 higher means better.
 
-This get abstracted.
+This may get abstracted some way or an other.
 
 ## The constructor
 
@@ -57,4 +57,5 @@ This call is, for obvious reasons, blocking.
 ## The derived class
 
 `PrintableBreeder` adds some verbose output to the evolution process. This adds
-a requirement to the `Gene` type: it must have an overloaded `operator<<`.
+a requirement to the `Chromosome` type: it must have an overloaded
+`operator<<`.
