@@ -24,8 +24,8 @@ Breeder<C, F>::start_workers()
           ** case the kill_workers boolean flag has been set). */
             {
               std::unique_lock<std::mutex> lock(m_cv);
-              cv.wait(lock, [this, idx] { return (processed[idx] == false
-                                                  || kill_workers == true); });
+              cv.wait(lock, [this, idx] { return (not processed[idx]
+                                                  or kill_workers); });
               if (kill_workers)
                 break;
             }
