@@ -4,7 +4,7 @@ I recently found myself in need of such an implementation, while working on a
 Rubik's Cube solver. It turned out to be a bit messy, so I started this as a
 side project.
 
-# The class template
+## The class template
 
 ```C++
 template<typename Gene, typename Fitness>
@@ -27,7 +27,7 @@ higher means better.
 
 This may also get abstracted.
 
-# The constructor
+## The constructor
 
 ```C++
 Breeder(Generator<Gene>, Scorer<Gene, Fitness>,
@@ -43,7 +43,7 @@ The third (optional) argument specifies a default size for the population.
 The last (optional) argument specifies a rate for spontaneous mutations. It
 must be comprised between 0 and 1.
 
-# The public member
+## The public member
 
 ```C++
   Chromosome<Gene>          pick(unsigned generations, Fitness score);
@@ -57,7 +57,7 @@ the calculations. It will also proceed to destroy them at the end.
 
 This call is, for obvious reasons, blocking.
 
-# The derived class
+## The derived class
 
 `PrintableBreeder` adds some verbose output to the evolution process. This adds
 a requirement to the `Gene` type: it must have an overloaded `operator<<`.
