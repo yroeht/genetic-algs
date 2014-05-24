@@ -36,17 +36,6 @@ Breeder<C, F>::Breeder(Generator<C> generator_,
     }
 }
 
-template<typename C, typename F>
-Breeder<C, F>::Breeder(Generator<C> generator_, Scorer<C, F> scorer_,
-                       unsigned population_size_)
-: Breeder<C, F>(generator_, scorer_, population_size_, DEF_MUT_RATE)
-{}
-
-template<typename C, typename F>
-Breeder<C, F>::Breeder(Generator<C> generator_, Scorer<C, F> scorer_)
-: Breeder<C, F>(generator_, scorer_, DEF_POP, DEF_MUT_RATE)
-{}
-
 /* The Generator fonction provided to the constructor returns a chromosome.
 ** This function makes an individual out of that chromosome, by pairing it up
 ** with its score. */

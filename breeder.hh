@@ -34,11 +34,9 @@ template<typename Chromosome, typename Fitness>
 class Breeder
 {
 public:
-  Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>);
   Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>,
-          unsigned population_size_);
-  Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>,
-          unsigned population_size_, double mutation_rate_);
+          unsigned population_size_ = DEF_POP,
+          double mutation_rate_ = DEF_MUT_RATE);
 
   /* Return the fittest individual after given maximum amount of generations.
   ** If compiled with -DCPUS=N, the method will create N threads to perform
