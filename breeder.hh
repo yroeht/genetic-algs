@@ -41,36 +41,35 @@ public:
   /* Return the fittest individual after given maximum amount of generations.
   ** If compiled with -DCPUS=N, the method will create N threads to perform
   ** the calculations. It will also proceed to destroy them at the end. */
-  Chromosome                pick(unsigned generations, Fitness score);
+  Chromosome                        pick(unsigned generations, Fitness score);
 
 private:
-  void                      cross(Chromosome&, Chromosome&) const;
-  Individual<Chromosome, Fitness>
-                            populator() const;
-  void                      score_threaded();
-  void                      sort();
-  void                      thread_func();
-  void                      start_workers();
+  void                              cross(Chromosome&, Chromosome&) const;
+  Individual<Chromosome, Fitness>   populator() const;
+  void                              score_threaded();
+  void                              sort();
+  void                              thread_func();
+  void                              start_workers();
 
 protected:
-  void                      evolve();
-  void                      stop_workers();
-  Population<Chromosome, Fitness> population;
+  void                              evolve();
+  void                              stop_workers();
+  Population<Chromosome, Fitness>   population;
 
 private:
-  Generator<Chromosome>         generator;
-  Scorer<Chromosome, Fitness>   scorer;
-  std::default_random_engine    rng;
-  std::function<int()>          crossover_rnd;
-  std::function<int()>          mutation_rnd;
+  Generator<Chromosome>             generator;
+  Scorer<Chromosome, Fitness>       scorer;
+  std::default_random_engine        rng;
+  std::function<int()>              crossover_rnd;
+  std::function<int()>              mutation_rnd;
   /* Threaded stuff... */
-  std::vector<std::thread>      workers;
-  std::vector<bool>             processed;
-  std::condition_variable       cv;
-  std::mutex                    m_cv;
-  std::atomic<bool>             kill_workers;
+  std::vector<std::thread>          workers;
+  std::vector<bool>                 processed;
+  std::condition_variable           cv;
+  std::mutex                        m_cv;
+  std::atomic<bool>                 kill_workers;
 
-  long                          padding : 56;
+  long                              padding : 56;
 };
 
 /* This derived class provides an overload of the pick() method, which
