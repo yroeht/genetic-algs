@@ -1,15 +1,14 @@
 #include <iostream>
 
-#include <breeder.hh>
-#include <printablegene.hh>
 #include <queensolver.hh>
+#include <breeder.hh>
 
 int main()
 {
   const int n_queens = 18;
-  PrintableBreeder<int, int> b (QueenSolver<n_queens>::generator,
-                                QueenSolver<n_queens>::scorer,
-                                10000, .3);
+  PrintableBreeder<std::vector<int>, int> b (QueenSolver<n_queens>::generator,
+                                             QueenSolver<n_queens>::scorer,
+                                             10000, .3);
   auto best = b.pick(10, QueenSolver<n_queens>::max_conflicts, std::cout);
 
 #if 0 // An other example.

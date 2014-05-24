@@ -1,9 +1,9 @@
-template<typename G, typename F>
+template<typename C, typename F>
 void
-Breeder<G, F>::start_workers()
+Breeder<C, F>::start_workers()
 {
   /* The population is equally divided among the workers by range. */
-  using P = Population<G, F>;
+  using P = Population<C, F>;
   typename std::vector<typename P::iterator> bounds;
     {
       unsigned step = static_cast<unsigned>(population.size() / CPUS);
@@ -30,7 +30,7 @@ Breeder<G, F>::start_workers()
                 break;
             }
           /* Do the CPU heavy work (score the assigned population range). */
-          std::for_each(lower_bound, higher_bound, [&] (Individual<G, F> i)
+          std::for_each(lower_bound, higher_bound, [&] (Individual<C, F> i)
                         { i.second = scorer(i.first); });
 
           /* Let it be known that the work is now done. */
@@ -51,9 +51,9 @@ Breeder<G, F>::start_workers()
                 return std::thread(thread_func, i++); });
 }
 
-template<typename G, typename F>
+template<typename C, typename F>
 void
-Breeder<G, F>::score_threaded()
+Breeder<C, F>::score_threaded()
 {
 
   /* This function is called at each generation, but the workers are only
@@ -77,9 +77,9 @@ Breeder<G, F>::score_threaded()
     }
 }
 
-template<typename G, typename F>
+template<typename C, typename F>
 void
-Breeder<G, F>::stop_workers()
+Breeder<C, F>::stop_workers()
 {
   /* Signal the workers to exit their loop. */
   kill_workers = true;

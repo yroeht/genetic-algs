@@ -14,43 +14,41 @@
 # define DEF_MUT_RATE   0.01
 # define DEF_POP        1000
 
-template<typename Gene>
-using Chromosome = std::vector<Gene>;
+template<typename Chromosome>
+using Pair = std::pair<Chromosome, Chromosome>;
 
-template<typename Gene>
-using Pair = std::pair<Chromosome<Gene>, Chromosome<Gene>>;
+template<typename Chromosome, typename Fitness>
+using Individual = std::pair<Chromosome, Fitness>;
 
-template<typename Gene, typename Fitness>
-using Individual = std::pair<Chromosome<Gene>, Fitness>;
+template<typename Chromosome, typename Fitness>
+using Population =  std::vector<Individual<Chromosome, Fitness>>;
 
-template<typename Gene, typename Fitness>
-using Population =  std::vector<Individual<Gene, Fitness>>;
+template<typename Chromosome>
+using Generator = std::function<Chromosome()>;
 
-template<typename Gene>
-using Generator = std::function<Chromosome<Gene>()>;
-
-template<typename Gene, typename Fitness>
-using Scorer = std::function<Fitness(Chromosome<Gene>)>;
+template<typename Chromosome, typename Fitness>
+using Scorer = std::function<Fitness(Chromosome)>;
 
 /* An implementation of a generic genetic algorithm. */
-template<typename Gene, typename Fitness>
+template<typename Chromosome, typename Fitness>
 class Breeder
 {
 public:
-  Breeder(Generator<Gene>, Scorer<Gene, Fitness>);
-  Breeder(Generator<Gene>, Scorer<Gene, Fitness>,
+  Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>);
+  Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>,
           unsigned population_size_);
-  Breeder(Generator<Gene>, Scorer<Gene, Fitness>,
+  Breeder(Generator<Chromosome>, Scorer<Chromosome, Fitness>,
           unsigned population_size_, double mutation_rate_);
 
   /* Return the fittest individual after given maximum amount of generations.
   ** If compiled with -DCPUS=N, the method will create N threads to perform
   ** the calculations. It will also proceed to destroy them at the end. */
-  Chromosome<Gene>          pick(unsigned generations, Fitness score);
+  Chromosome                pick(unsigned generations, Fitness score);
 
 private:
-  void                      cross(Chromosome<Gene>&, Chromosome<Gene>&) const;
-  Individual<Gene, Fitness> populator() const;
+  void                      cross(Chromosome&, Chromosome&) const;
+  Individual<Chromosome, Fitness>
+                            populator() const;
   void                      score_threaded();
   void                      sort();
   void                      thread_func();
@@ -59,11 +57,11 @@ private:
 protected:
   void                      evolve();
   void                      stop_workers();
-  Population<Gene, Fitness> population;
+  Population<Chromosome, Fitness> population;
 
 private:
-  Generator<Gene>               generator;
-  Scorer<Gene, Fitness>         scorer;
+  Generator<Chromosome>         generator;
+  Scorer<Chromosome, Fitness>   scorer;
   std::default_random_engine    rng;
   std::function<int()>          crossover_rnd;
   std::function<int()>          mutation_rnd;
@@ -79,17 +77,18 @@ private:
 
 /* This derived class provides an overload of the pick() method, which
 ** features a verbose output of the evolutionary process. This however adds a
-** constraint on the Gene type: it must have an overload for operator<<. */
-template<typename Gene, typename Fitness>
-class PrintableBreeder : public Breeder<Gene, Fitness>
+** constraint on the Chromosome type: it must have an overload for operator<<.
+** */
+template<typename Chromosome, typename Fitness>
+class PrintableBreeder : public Breeder<Chromosome, Fitness>
 {
-  using Breeder<Gene, Fitness>::evolve;
-  using Breeder<Gene, Fitness>::stop_workers;
+  using Breeder<Chromosome, Fitness>::evolve;
+  using Breeder<Chromosome, Fitness>::stop_workers;
 public:
-  using Breeder<Gene, Fitness>::Breeder;
-  using Breeder<Gene, Fitness>::pick;
-  Chromosome<Gene>              pick(unsigned generations, Fitness score,
-                                     std::ostream& os);
+  using Breeder<Chromosome, Fitness>::Breeder;
+  using Breeder<Chromosome, Fitness>::pick;
+  Chromosome                          pick(unsigned generations, Fitness score,
+                                           std::ostream& os);
 };
 
 # include <breeder.hxx>

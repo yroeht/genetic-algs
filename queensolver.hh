@@ -4,6 +4,9 @@
 # include <algorithm>
 # include <cassert>
 # include <chrono>
+# include <functional>
+# include <iterator>
+# include <ostream>
 # include <random>
 # include <set>
 # include <vector>
@@ -17,6 +20,13 @@ public:
 
   static const int max_conflicts = (N * (N - 1) / 2);
 };
+
+std::ostream& operator<<(std::ostream& os, const std::vector<int>& queens)
+{
+  std::copy(queens.begin(), queens.end(),
+            std::ostream_iterator<int>(os, ","));
+  return os;
+}
 
 template<unsigned N>
 std::vector<int>
